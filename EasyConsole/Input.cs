@@ -12,26 +12,42 @@ namespace EasyConsole
 
         public static int ReadInt(int min, int max)
         {
-            int value = ReadInt();
+            bool lessThan9 = (max - min) < 10;
+
+            int value = ReadInt(lessThan9);
 
             while (value < min || value > max)
             {
                 Output.DisplayPrompt("Please enter an integer between {0} and {1} (inclusive)", min, max);
-                value = ReadInt();
+                value = ReadInt(lessThan9);
             }
 
             return value;
         }
 
-        public static int ReadInt()
+        public static int ReadInt(bool canReadKey = true)
         {
-            string input = Console.ReadLine();
+            string input;
             int value;
 
-            while (!int.TryParse(input, out value))
+            while (true)
             {
+                if (canReadKey)
+                {
+                    input = Console.ReadKey().KeyChar.ToString();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    input = Console.ReadLine();
+                }
+
+                if (int.TryParse(input, out value))
+                {
+                    break;
+                }
+                
                 Output.DisplayPrompt("Please enter an integer");
-                input = Console.ReadLine();
             }
 
             return value;
