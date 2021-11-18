@@ -6,26 +6,26 @@ namespace EasyConsole
     {
         public static int ReadInt(string prompt, int min, int max)
         {
-            Output.DisplayPrompt(prompt);
-            return ReadInt(min, max);
+            bool lessThan9 = (max - min) < 10;
+            
+            Output.DisplayPrompt(prompt + (lessThan9 ? " and then press enter: " : ": "));
+            return ReadInt(min, max, lessThan9);
         }
 
-        public static int ReadInt(int min, int max)
+        public static int ReadInt(int min, int max, bool canReadKey = false)
         {
-            bool lessThan9 = (max - min) < 10;
-
-            int value = ReadInt(lessThan9);
+            int value = ReadInt(canReadKey);
 
             while (value < min || value > max)
             {
-                Output.DisplayPrompt("Please enter an integer between {0} and {1} (inclusive)", min, max);
-                value = ReadInt(lessThan9);
+                Output.DisplayPrompt("Please enter an integer between {0} and {1} (inclusive) then press enter: ", min, max);
+                value = ReadInt(canReadKey);
             }
 
             return value;
         }
 
-        public static int ReadInt(bool canReadKey = true)
+        public static int ReadInt(bool canReadKey = false)
         {
             string input;
             int value;
@@ -47,7 +47,7 @@ namespace EasyConsole
                     break;
                 }
                 
-                Output.DisplayPrompt("Please enter an integer");
+                Output.DisplayPrompt("Please enter an integer" + (canReadKey ? " and then press enter: " : " "));
             }
 
             return value;
