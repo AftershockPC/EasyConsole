@@ -8,7 +8,7 @@ namespace EasyConsole
         {
             bool lessThan9 = (max - min) < 10;
             
-            Output.DisplayPrompt(prompt + (lessThan9 ? " and then press enter: " : ": "));
+            Output.DisplayPrompt(prompt + (lessThan9 ? ": " : " and then press enter: "));
             return ReadInt(min, max, lessThan9);
         }
 
