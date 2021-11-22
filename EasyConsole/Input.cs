@@ -76,5 +76,21 @@ namespace EasyConsole
 
             return choice;
         }
+
+        public static bool ReadConfirmation(string option)
+        {
+            Output.WriteLine($"You selected {option}, is this correct (Y/n)?");
+
+            var choice = Console.ReadKey().Key;
+            Console.WriteLine();
+
+            while (choice != ConsoleKey.Y && choice != ConsoleKey.N)
+            {
+                Console.Write("Please press Y or N: ");
+                choice = Console.ReadKey().Key;
+            }
+
+            return choice == ConsoleKey.Y;
+        }
     }
 }
