@@ -79,7 +79,7 @@ namespace EasyConsole
 
         public static bool ReadConfirmation(string option)
         {
-            Output.WriteLine($"You selected {option}, is this correct (Y/n)?");
+            Output.WriteLine($"You selected \"{option}\", is this correct (Y/n)?");
 
             var choice = Console.ReadKey().Key;
             Console.WriteLine();
