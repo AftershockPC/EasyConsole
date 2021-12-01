@@ -6,24 +6,24 @@ namespace EasyConsole
 {
     public class Menu
     {
-        private IList<Option> Options { get; set; }
-
         public Menu()
         {
             Options = new List<Option>();
         }
+
+        private IList<Option> Options { get; }
 
         public void Display()
         {
             int choice;
             while (true)
             {
-                for (int i = 0; i < Options.Count; i++)
+                for (var i = 0; i < Options.Count; i++)
                 {
                     Console.WriteLine("{0}. {1}", i + 1, Options[i].Name);
                 }
 
-                choice = Input.ReadInt("Choose an option", min: 1, max: Options.Count);
+                choice = Input.ReadInt("Choose an option", 1, Options.Count);
 
                 if (Input.ReadConfirmation(Options[choice - 1].Name))
                 {
@@ -47,7 +47,7 @@ namespace EasyConsole
 
         public bool Contains(string option)
         {
-            return Options.FirstOrDefault((op) => op.Name.Equals(option)) != null;
+            return Options.FirstOrDefault(op => op.Name.Equals(option)) != null;
         }
     }
 }

@@ -6,19 +6,20 @@ namespace EasyConsole
     {
         public static int ReadInt(string prompt, int min, int max)
         {
-            bool lessThan9 = (max - min) < 10;
-            
+            var lessThan9 = max - min < 10;
+
             Output.DisplayPrompt(prompt + (lessThan9 ? ": " : " and then press enter: "));
             return ReadInt(min, max, lessThan9);
         }
 
         public static int ReadInt(int min, int max, bool canReadKey = false)
         {
-            int value = ReadInt(canReadKey);
+            var value = ReadInt(canReadKey);
 
             while (value < min || value > max)
             {
-                Output.DisplayPrompt("Please enter an integer between {0} and {1} (inclusive) then press enter: ", min, max);
+                Output.DisplayPrompt("Please enter an integer between {0} and {1} (inclusive) then press enter: ", min,
+                    max);
                 value = ReadInt(canReadKey);
             }
 
@@ -46,7 +47,7 @@ namespace EasyConsole
                 {
                     break;
                 }
-                
+
                 Output.DisplayPrompt("Please enter an integer" + (canReadKey ? " and then press enter: " : " "));
             }
 
@@ -61,17 +62,22 @@ namespace EasyConsole
 
         public static TEnum ReadEnum<TEnum>(string prompt) where TEnum : struct, IConvertible, IComparable, IFormattable
         {
-            Type type = typeof(TEnum);
+            var type = typeof(TEnum);
 
             if (!type.IsEnum)
+            {
                 throw new ArgumentException("TEnum must be an enumerated type");
+            }
 
             Output.WriteLine(prompt);
-            Menu menu = new Menu();
+            var menu = new Menu();
 
-            TEnum choice = default(TEnum);
+            var choice = default(TEnum);
             foreach (var value in Enum.GetValues(type))
+            {
                 menu.Add(Enum.GetName(type, value), () => { choice = (TEnum)value; });
+            }
+
             menu.Display();
 
             return choice;

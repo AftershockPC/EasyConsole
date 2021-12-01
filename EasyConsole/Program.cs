@@ -7,24 +7,6 @@ namespace EasyConsole
 {
     public abstract class Program
     {
-        protected string Title { get; set; }
-
-        public bool BreadcrumbHeader { get; private set; }
-
-        protected Page CurrentPage
-        {
-            get
-            {
-                return (History.Any()) ? History.Peek() : null;
-            }
-        }
-
-        private Dictionary<Type, Page> Pages { get; set; }
-
-        public Stack<Page> History { get; private set; }
-
-        public bool NavigationEnabled { get { return History.Count > 1; } }
-
         protected Program(string title, bool breadcrumbHeader)
         {
             Title = title;
@@ -32,6 +14,18 @@ namespace EasyConsole
             History = new Stack<Page>();
             BreadcrumbHeader = breadcrumbHeader;
         }
+
+        protected string Title { get; set; }
+
+        public bool BreadcrumbHeader { get; }
+
+        protected Page CurrentPage => History.Any() ? History.Peek() : null;
+
+        private Dictionary<Type, Page> Pages { get; }
+
+        public Stack<Page> History { get; }
+
+        public bool NavigationEnabled => History.Count > 1;
 
         public virtual void Run()
         {
@@ -56,18 +50,24 @@ namespace EasyConsole
 
         public void AddPage(Page page)
         {
-            Type pageType = page.GetType();
+            var pageType = page.GetType();
 
             if (Pages.ContainsKey(pageType))
+            {
                 Pages[pageType] = page;
+            }
             else
+            {
                 Pages.Add(pageType, page);
+            }
         }
 
         public void NavigateHome()
         {
             while (History.Count > 1)
+            {
                 History.Pop();
+            }
 
             Console.Clear();
             CurrentPage.Display();
@@ -75,17 +75,22 @@ namespace EasyConsole
 
         public T SetPage<T>() where T : Page
         {
-            Type pageType = typeof(T);
+            var pageType = typeof(T);
 
             if (CurrentPage != null && CurrentPage.GetType() == pageType)
+            {
                 return CurrentPage as T;
+            }
 
             // leave the current page
 
             // select the new page
             Page nextPage;
             if (!Pages.TryGetValue(pageType, out nextPage))
-                throw new KeyNotFoundException("The given page \"{0}\" was not present in the program".Format(pageType));
+            {
+                throw new KeyNotFoundException(
+                    "The given page \"{0}\" was not present in the program".Format(pageType));
+            }
 
             // enter the new page
             History.Push(nextPage);
